@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09491AE91E5AE43600DB0D96 /* 20170220004510-38178-data.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 09491AE81E5AE43600DB0D96 /* 20170220004510-38178-data.gpx */; };
+		09491AEB1E5AFB4900DB0D96 /* PasosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09491AEA1E5AFB4900DB0D96 /* PasosTableViewController.swift */; };
 		F44247821DA6439300F3F437 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44247811DA6439300F3F437 /* AppDelegate.swift */; };
 		F44247871DA6439300F3F437 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F44247851DA6439300F3F437 /* Main.storyboard */; };
 		F44247891DA6439300F3F437 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44247881DA6439300F3F437 /* Assets.xcassets */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09491AE81E5AE43600DB0D96 /* 20170220004510-38178-data.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "20170220004510-38178-data.gpx"; path = "../../Downloads/20170220004510-38178-data.gpx"; sourceTree = "<group>"; };
+		09491AEA1E5AFB4900DB0D96 /* PasosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasosTableViewController.swift; sourceTree = "<group>"; };
 		F442477E1DA6439300F3F437 /* MapKitDirection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapKitDirection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F44247811DA6439300F3F437 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F44247861DA6439300F3F437 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -45,6 +49,7 @@
 		F44247751DA6439300F3F437 = {
 			isa = PBXGroup;
 			children = (
+				09491AE81E5AE43600DB0D96 /* 20170220004510-38178-data.gpx */,
 				F44247801DA6439300F3F437 /* MapKitDirection */,
 				F442477F1DA6439300F3F437 /* Products */,
 				F44247991DA6489E00F3F437 /* Frameworks */,
@@ -64,6 +69,7 @@
 			children = (
 				F44247811DA6439300F3F437 /* AppDelegate.swift */,
 				F44247851DA6439300F3F437 /* Main.storyboard */,
+				09491AEA1E5AFB4900DB0D96 /* PasosTableViewController.swift */,
 				F44247881DA6439300F3F437 /* Assets.xcassets */,
 				F442478A1DA6439300F3F437 /* LaunchScreen.storyboard */,
 				F442478D1DA6439300F3F437 /* Info.plist */,
@@ -147,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F442478C1DA6439300F3F437 /* LaunchScreen.storyboard in Resources */,
+				09491AE91E5AE43600DB0D96 /* 20170220004510-38178-data.gpx in Resources */,
 				F44247891DA6439300F3F437 /* Assets.xcassets in Resources */,
 				F44247871DA6439300F3F437 /* Main.storyboard in Resources */,
 			);
@@ -161,6 +168,7 @@
 			files = (
 				F44247941DA6462E00F3F437 /* RestaurantTableViewController.swift in Sources */,
 				F44247981DA6471000F3F437 /* Restaurant.swift in Sources */,
+				09491AEB1E5AFB4900DB0D96 /* PasosTableViewController.swift in Sources */,
 				F44247961DA6465600F3F437 /* MapViewController.swift in Sources */,
 				F44247821DA6439300F3F437 /* AppDelegate.swift in Sources */,
 			);
@@ -286,7 +294,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MapKitDirection/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.MapKitDirection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -299,7 +307,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MapKitDirection/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.MapKitDirection;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -10,18 +10,36 @@ import UIKit
 import MapKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
-
+    
+    let offset: Double = 10000
+    
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var myViewTest: UIView!
     
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     
     var restaurant:Restaurant!
-
+    let locationManager = CLLocationManager()
+    var currentPlacemark: CLPlacemark?
+    var currentTransporte = MKDirectionsTransportType.automobile
+    var currentRuta: MKRoute?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        
+        locationManager.requestWhenInUseAuthorization()//Para pedir la autorizacion
+        let status = CLLocationManager.authorizationStatus()
+        
+        if status == CLAuthorizationStatus.authorizedWhenInUse{
+        
+        mapView.showsUserLocation = true
+        segmentedControl.isHidden = true
+        segmentedControl.addTarget(self, action: #selector(showDirection), for: .valueChanged)
+            
+        }
+        
         // Convert address to coordinate and annotate it on map
         let geoCoder = CLGeocoder()
         geoCoder.geocodeAddressString(restaurant.location, completionHandler: { placemarks, error in
@@ -33,6 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if let placemarks = placemarks {
                 // Get the first placemark
                 let placemark = placemarks[0]
+                self.currentPlacemark = placemark
                 
                 // Add annotation
                 let annotation = MKPointAnnotation()
@@ -51,7 +70,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         })
         
         mapView.delegate = self
-        if #available(iOS 9.0, *) {
+        if #available(iOS 9.0, *) { //Detecta la version del OS
             mapView.showsCompass = true
             mapView.showsScale = true
             mapView.showsTraffic = true
@@ -88,8 +107,84 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if #available(iOS 9.0, *) {
             annotationView?.pinTintColor = UIColor.orange
         }
+        annotationView?.rightCalloutAccessoryView = UIButton(type: UIButtonType.detailDisclosure)//Es el boton a la derecha del bocadillo
         
         return annotationView
     }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        performSegue(withIdentifier: "mostrarPasos", sender: view)
+    }
+    
+    @IBAction func showDirection(_ sender: AnyObject) {
+        
+        switch segmentedControl.selectedSegmentIndex{
+            case 0:
+                currentTransporte = MKDirectionsTransportType.automobile
+            case 1:
+                currentTransporte = MKDirectionsTransportType.walking
+            default:
+                break;
+        
+        }
+        
+        segmentedControl.isHidden = false
+        
+        guard let currentPlacemark = currentPlacemark else {
+        return
+        }
+        
+        let directionRequest = MKDirectionsRequest()
+        //Establecer punto de inicio y punto de llegada
+        directionRequest.source = MKMapItem.forCurrentLocation()
+        let destinationPlacemark = MKPlacemark(placemark: currentPlacemark)
+        directionRequest.destination = MKMapItem(placemark: destinationPlacemark)
+        directionRequest.transportType = currentTransporte //Le decimos que queremos ir en coche
+        
+        //Calcular direccion
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate { (routeResponse, routeError) in
+            guard let routeResponse = routeResponse else {
+                if let routeError = routeError{
+                print("Error:\(routeError)")
+                }
+            return
+            }
+            let route = routeResponse.routes[0]
+            self.currentRuta = route //Para pasarle la informacion por el segue
+            self.mapView.removeOverlays(self.mapView.overlays) //Para eliminar las demas rutas y que solo se muestre 1 y no 2 al cambiar de tipo de ruta
+            
+            self.mapView.add(route.polyline, level: MKOverlayLevel.aboveRoads)//Polyline una opcion que te da rout, te da, tiempo estimado, informacion.. otra es polyline que es que te la dibuje. En MKOverlayLevel es que se muestre encima de la informacion, debajo y demas opciones
+            var rect = route.polyline.boundingMapRect//Crea un rectangulo con el tamaño de la ruta 
+            rect.size.height += 5000
+            rect.size.width += 5000
+            
+            rect.origin.x -= 2500
+            rect.origin.y -= 2500
+            
+            self.mapView.setRegion(MKCoordinateRegionForMapRect(rect), animated: true)
+        }
+    }
+    
+    
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = (currentTransporte == .automobile) ? UIColor.blue : UIColor.orange
+        renderer.lineWidth = 3.0
+        
+        return renderer
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "mostrarPasos"{
+        let pasosTableVC = segue.destination.childViewControllers[0] as! PasosTableViewController
+            if let pasos = currentRuta?.steps {
+                pasosTableVC.pasosRuta = pasos
+            }
+        }
+    }
+    
+    
     
 }
