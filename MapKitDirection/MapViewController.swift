@@ -82,6 +82,41 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    @IBAction func localSearchPressed(_ sender: AnyObject) {
+        
+        let searchRequest = MKLocalSearchRequest() //Necesitamos un request que lo vamos a necesitar para hacer una busqueda
+        searchRequest.naturalLanguageQuery = restaurant.type //Que propiedades tiene esta peticion,  como es un string y está escrito en lenguaje natural le decimos que esta escrito en lenguaje natural
+        searchRequest.region = mapView.region //Para que busque en la region que queremos
+        
+
+        let localSearch = MKLocalSearch(request: searchRequest) //Creamos la variable local search y le enviamos la peticion
+        localSearch.start { (response, error) in
+            guard let response = response else {
+                if let error = error {
+                    print(error)
+                }
+                return
+            }
+            
+            let mapItems = response.mapItems //Creamos una variable donde nos guarda todos los puntos que ha devuelto la busqueda
+            var nearbyAnnotations: [MKAnnotation] = [] //Creamos un array de anotaciones, donde guardaremos parte de la informacion que nos devuelve los items del mapa
+            if mapItems.count > 0 { //Si ha encontrado algo
+                for item in mapItems {
+                //Añadir anotacion al mapa
+                    let annotation = MKPointAnnotation()
+                    annotation.title = item.name
+                    annotation.subtitle = item.phoneNumber
+                    if let location = item.placemark.location { //Si tiene localizacion 
+                        annotation.coordinate = location.coordinate
+                    }
+                    nearbyAnnotations.append(annotation)
+                }
+            }
+            self.mapView.showAnnotations(nearbyAnnotations, animated: true)
+        }
+    }
+    
     // MARK: - MKMapViewDelegate methods
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
